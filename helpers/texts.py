@@ -36,10 +36,16 @@ def binary_classify_based_on_text(
     -------
     * (tuple): A tuple containing the confusion matrix values (tp, fp, fn, tn).
     """
+    X_train, X_test, y_train, y_test = train_test_split(
+        df[text_col_name],
+        df[label_col_name],
+        test_size=test_size,
+        random_state=random_state,
+    )
     vectorizer = TfidfVectorizer(stop_words='english', max_features=150)
-    X = vectorizer.fit_transform(df[text_col_name]).toarray()
-    y = df[label_col_name]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train = vectorizer.fit_transform(X_train).toarray()
+    X_test = vectorizer.transform(X_test).toarray()
+    print("Information: This function is currently using 'LogisticRegression'. You may want to change this to 'SGDClassifier' depending on the task.")
     clf = LogisticRegression(C=C, max_iter=max_iter)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
@@ -79,10 +85,15 @@ def classify_based_on_text(
     * (tuple): A tuple containing the confusion matrix and class names,
       allowing to plot the confusion matrix easily.
     """
+    X_train, X_test, y_train, y_test = train_test_split(
+        df[text_col_name],
+        df[label_col_name],
+        test_size=test_size,
+        random_state=random_state,
+    )
     vectorizer = TfidfVectorizer(stop_words='english', max_features=150)
-    X = vectorizer.fit_transform(df[text_col_name]).toarray()
-    y = df[label_col_name]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train = vectorizer.fit_transform(X_train).toarray()
+    X_test = vectorizer.transform(X_test).toarray()
     clf = RidgeClassifier()
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
@@ -115,10 +126,15 @@ def regression_based_on_text(
     -------
     * (tuble): y_true, y_pred
     """
+    X_train, X_test, y_train, y_test = train_test_split(
+        df[text_col_name],
+        df[label_col_name],
+        test_size=test_size,
+        random_state=random_state,
+    )
     vectorizer = TfidfVectorizer(stop_words='english', max_features=150)
-    X = vectorizer.fit_transform(df[text_col_name]).toarray()
-    y = df[label_col_name]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train = vectorizer.fit_transform(X_train).toarray()
+    X_test = vectorizer.transform(X_test).toarray()
     clf = LinearRegression()
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
